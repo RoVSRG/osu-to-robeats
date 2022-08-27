@@ -3,12 +3,32 @@ import { useEffect, useState } from "react"
 import { Button, TextField } from '@material-ui/core';
 import * as md5 from "md5"
 import { parseContent } from "osu-parser"
+import { post } from "axios"
 
 const xToTrackMap = {
   64: 1,
   192: 2,
   320: 3,
   448: 4
+}
+
+function mockDifficulties() {
+  let mock = []
+
+  for (let i = 0; i < 14; i++)
+    mock.push({
+      Overall: 0,
+      Chordjack: 0,
+      Handstream: 0,
+      Jack: 0,
+      Jumpstream: 0,
+      Stamina: 0,
+      Stream: 0,
+      Technical: 0,
+      Rate: (i + 7) * 10,
+    })
+
+  return mock
 }
 
 function App() {
@@ -26,7 +46,7 @@ function App() {
         </div>
       </div>
       <div>
-        <Button color="primary" onClick={() => {
+        <Button color="primary" onClick={async () => {
           const data = parseContent(osuText)
           let out = {
             "AudioArtist": data.Artist,
@@ -65,6 +85,10 @@ function App() {
                 break
             }
           })
+
+          const difficulties = await post("http://161.35.49.68/api/difficulties", out)
+
+          out.AudioDifficulty = difficulties ? difficulties.data : mockDifficulties()
 
           const hitObjectJsonString = JSON.stringify(out.HitObjects)
           const audioMD5Hash = md5(hitObjectJsonString)
