@@ -86,7 +86,7 @@ function App() {
             }
           })
 
-          const difficulties = await post("http://161.35.49.68/api/difficulties", out)
+          const difficulties = await post("https://diff.regenerate.repl.co", out)
 
           out.AudioDifficulty = difficulties ? difficulties.data : mockDifficulties()
 
