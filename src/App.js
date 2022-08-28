@@ -88,7 +88,11 @@ function App() {
 
           const difficulties = await post("https://diff.regenerate.repl.co", out).catch(err => console.log(err))
 
-          out.AudioDifficulty = difficulties ? difficulties.data : mockDifficulties()
+          out.AudioDifficulty = difficulties ? difficulties.data.map(difficulty => {
+            difficulty._id = undefined
+
+            return difficulty
+          }) : mockDifficulties()
 
           const hitObjectJsonString = JSON.stringify(out.HitObjects)
           const audioMD5Hash = md5(hitObjectJsonString)
