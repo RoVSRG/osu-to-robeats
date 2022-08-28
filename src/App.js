@@ -86,7 +86,7 @@ function App() {
             }
           })
 
-          const difficulties = await post("https://diff.regenerate.repl.co", out)
+          const difficulties = await post("https://diff.regenerate.repl.co", out).catch(err => console.log(err))
 
           out.AudioDifficulty = difficulties ? difficulties.data : mockDifficulties()
 
