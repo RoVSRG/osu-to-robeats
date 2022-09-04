@@ -88,8 +88,15 @@ function App() {
 
           const difficulties = await post("https://diff.regenerate.repl.co", out).catch(err => console.log(err))
 
+          const MSD_MULT = 1.8
+
           out.AudioDifficulty = difficulties ? difficulties.data.map(difficulty => {
-            difficulty._id = undefined
+            delete difficulty._id
+
+            for (let key of Object.keys(difficulty)) {
+              if (key != "Rate")
+                difficulty[key] *= MSD_MULT
+            }
 
             return difficulty
           }) : mockDifficulties()
